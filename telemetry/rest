@@ -1,0 +1,11 @@
+POST http://127.0.0.1:3000/telemetry
+Content-Type: application/json
+{
+    "user": "rafaelcorsi",
+    "course": "22b-emb",
+    "data": [
+        "",
+        "status",
+        "assignee"
+    ]
+}
