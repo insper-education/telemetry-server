@@ -36,14 +36,30 @@ def checkCourseExists(name):
         return True
 
 
+def checkChannelExists(name):
+    if len(Channel.objects.filter(name=name)) == 0:
+        return False
+    else:
+        return True
+
+
 def createCourse(name):
     course = Course.objects.create(name=name)
     course.Professor = None
     course.save()
 
 
+def createChannel(name):
+    channel = Channel.objects.create(name=name)
+    channel.save()
+
+
 def courseFromName(name):
     return Course.objects.get(name=name)
+
+
+def channelFromName(name):
+    return Channel.objects.get(name=name)
 
 
 def saveTelemetry(student, course, channel, log):

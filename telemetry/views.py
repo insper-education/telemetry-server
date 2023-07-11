@@ -14,9 +14,9 @@ def telemetry(request):
         payload = json.loads(request.body)
 
         student = userFromToken(payload["userToken"])
-        courseName = payload["courseName"]
-        channel = payload["channel"]
-        data = payload["telemetry"]
+        courseName = payload["exercise"]["course"]
+        channelName = payload["exercise"]["slug"]
+        data = payload["log"]
 
         if student == None:
             HttpResponse("<h1>No user </h1>", status=400)
@@ -27,7 +27,11 @@ def telemetry(request):
         if not checkCourseExists(courseName):
             createCourse(courseName)
 
+        if not checkChannelExists(channelName):
+            createChannel(channelName)
+
         course = courseFromName(courseName)
+        channel = channelFromName(channelName)
         saveTelemetry(student, course, channel, data)
         return HttpResponse(status=200)
     else:
@@ -36,7 +40,7 @@ def telemetry(request):
 
 def infoFromToken(request):
     if request.method == "GET":
-        token = request.GET.get("token", "")
+        token = request.headers.get("Authorization")
         user = userFromToken(token)
         if user == None:
             return HttpResponse(status=400)
@@ -48,4 +52,4 @@ def infoFromToken(request):
                 ],
             )
 
-            return HttpResponse(json, content_type="application/json")
+    return HttpResponse(json, content_type="application/json")

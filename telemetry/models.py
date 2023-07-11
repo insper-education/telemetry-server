@@ -25,9 +25,12 @@ class Course(models.Model):
     )
 
 
+class Channel(models.Model):
+    name = models.CharField(max_length=30)
+
+
 class Data(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    channel = models.CharField(max_length=30)
-    #    ts = models.DateTimeField()
+    channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
     log = models.JSONField()

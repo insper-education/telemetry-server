@@ -6,7 +6,7 @@ from django.conf import settings
 from django.shortcuts import redirect, render, redirect
 from django.urls import reverse
 from urllib.parse import quote_plus, urlencode
-from telemetry.user import studentLoginGH
+from telemetry.user import studentLoginGH, userFromToken
 
 oauth = OAuth()
 
@@ -65,3 +65,20 @@ def index(request):
             "pretty": json.dumps(request.session.get("user"), indent=4),
         },
     )
+
+
+def infoFromToken(request):
+    if request.method == "GET":
+        token = request.headers.get("Authorization")
+        user = userFromToken(token)
+        if user == None:
+            return HttpResponse(status=400)
+        else:
+            json = serializers.serialize(
+                "json",
+                [
+                    user,
+                ],
+            )
+
+    return HttpResponse(json, content_type="application/json")
