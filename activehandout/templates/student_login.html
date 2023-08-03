@@ -1,19 +1,44 @@
+
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Auth0 Example</title>
+    <title>Token</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" >
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   </head>
   <body>
-    {% if session %}
 
-    <h1>Hello {{session.userinfo.name}}</h1>
-    <p>Past the fallowing string on the requested terminal:</p>
-    <h2>{{token}}</h2>
-    <p> You can close this page if you want.</p>
-    <p><a href="{% url 'logout' %}">Logout</a></p>
+<div class="splash-container">
+    {% if session %}
+    <div class="splash">
+      <p class="splash-subhead">
+          {{session.userinfo.name}} past the fallowing string on the requested terminal:
+      </p>
+      <h1 class="splash-head" id="token">{{token}}</h1>
+      <button onclick="copyToClipboard()" class="pure-button pure-button-primary">Click here to copy to clipboard</a>
     {% else %}
-    <h1>Login to access your token</h1>
-    <p><a href="{% url 'login' %}">Login</a></p>
-    {% endif %}
-  </body>
+      <p class="splash-subhead">
+        Please run on terminal
+      </p>
+      <h1 class="splash-head">telemetry auth</h1>
+    {% endif  %}
+    </div>
+</div>
+
+</body>
 </html>
+
+<script>
+  function copyToClipboard() {
+  // Get the text field
+  var copyText = document.getElementById("token");
+
+   // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText.innerText );
+
+  alert("Past copied text in terminal!");
+  }
+</script>
