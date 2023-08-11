@@ -15,7 +15,7 @@ def telemetry(request):
 
         student = userFromToken(payload["userToken"])
         courseName = payload["exercise"]["course"]
-        channelName = payload["exercise"]["slug"]
+        channelName = payload["exercise"]["channel"]
         data = payload["log"]
 
         if student == None:
