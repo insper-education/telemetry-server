@@ -12,6 +12,7 @@ import json
 def telemetry(request):
     if request.method == "POST":
         token = request.headers.get("Authorization")
+<<<<<<< HEAD
         studentData = userFromToken(token)
         if studentData == None:
             return HttpResponse(status=401)
@@ -19,6 +20,15 @@ def telemetry(request):
         payload = json.loads(request.body)
         course = payload["course"]
         channel = payload["channel"]
+=======
+        student = userFromToken(token)
+        if student == None:
+            return HttpResponse(status=401)
+
+        payload = json.loads(request.body)
+        courseName = payload["course"]
+        channelName = payload["channel"]
+>>>>>>> f7551f5 (improve authorizations)
         data = payload["log"]
 
         if not checkCourseExists(course):
