@@ -11,28 +11,25 @@ import json
 @csrf_exempt
 def telemetry(request):
     if request.method == "POST":
-        payload = json.loads(request.body)
+        token = request.headers.get("Authorization")
+        studentData = userFromToken(token)
+        if studentData == None:
+            return HttpResponse(status=401)
 
-        student = userFromToken(payload["userToken"])
-        courseName = payload["course"]
-        channelName = payload["channel"]
+        payload = json.loads(request.body)
+        course = payload["course"]
+        channel = payload["channel"]
         data = payload["log"]
 
-        if student == None:
-            HttpResponse("<h1>No user </h1>", status=400)
+        if not checkCourseExists(course):
+            createCourse(course)
 
-        if courseName == None:
-            HttpResponse("<h1>No course token</h1>", status=400)
+        if not checkChannelExists(channel):
+            createChannel(channel)
 
-        if not checkCourseExists(courseName):
-            createCourse(courseName)
-
-        if not checkChannelExists(channelName):
-            createChannel(channelName)
-
-        course = courseFromName(courseName)
-        channel = channelFromName(channelName)
-        saveTelemetry(student, course, channel, data)
+        courseData = courseFromName(course)
+        channelData = channelFromName(channel)
+        saveTelemetry(studentData, courseData, channelData, data)
         return HttpResponse(status=200)
     else:
         return HttpResponse("<h1>Send data here.</h1>")
