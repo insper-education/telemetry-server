@@ -11,9 +11,12 @@ import json
 @csrf_exempt
 def telemetry(request):
     if request.method == "POST":
-        payload = json.loads(request.body)
+        token = request.headers.get("Authorization")
+        student = userFromToken(token)
+        if student == None:
+            return HttpResponse(status=401)
 
-        student = userFromToken(payload["userToken"])
+        payload = json.loads(request.body)
         courseName = payload["course"]
         channelName = payload["channel"]
         data = payload["log"]
